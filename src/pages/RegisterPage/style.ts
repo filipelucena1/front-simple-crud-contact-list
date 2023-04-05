@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const StyledLogin = styled.div`
+export const StyledRegister = styled.div`
     width: 100%;
     min-height: 100vh;
     display: flex;

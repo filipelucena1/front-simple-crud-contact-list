@@ -1,4 +1,4 @@
-import { StyledLogin } from "./style";
+import { StyledRegister } from "./style";
 
 import { useNavigate } from "react-router-dom";
 
@@ -53,7 +53,7 @@ export const RegisterPage = () => {
     };
 
     return (
-        <StyledLogin>
+        <StyledRegister>
             <h1>Contacts List</h1>
             <h2>Simple CRUD</h2>
             <form onSubmit={handleSubmit(onSubmitFunction)}>
@@ -79,6 +79,6 @@ export const RegisterPage = () => {
                     <button onClick={() => navigate("/login")}>Login</button>
                 </>
             </form>
-        </StyledLogin>
+        </StyledRegister>
     );
 };

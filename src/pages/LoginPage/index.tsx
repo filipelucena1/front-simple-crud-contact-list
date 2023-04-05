@@ -1,17 +1,19 @@
-import { StyledLogin } from "./style";
+import { StyledLogin, StyledToast } from "./style";
 
-import jwt_decode from "jwt-decode";
-
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 import api from "../../services/api";
 
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
 import { toast } from "react-toastify";
-import { ILogin } from "../../interfaces/login";
+import 'react-toastify/dist/ReactToastify.css';
+import { AxiosError } from "axios";
+import { UserContext, iApiError, iUser } from "../../contexts";
+import { useContext } from "react";
+
+
 
 export const LoginPage = () => {
     const navigate = useNavigate();
@@ -29,22 +31,28 @@ export const LoginPage = () => {
         resolver: yupResolver(formSchema),
     });
 
+    const { setUser} = useContext(UserContext);
+
     const onSubmitFunction: SubmitHandler<FieldValues> = async (data) => {
-        try {            
-            api.post("/login", data). then((response) => {
-                toast.success("Logado com sucesso!", { autoClose: 3000 });
-                window.localStorage.setItem(
-                    "simple_CRUD_token",
-                    `${response.data.accessToken}`
-                );
-                window.localStorage.setItem(
-                    "simple_CRUD_Id",
-                    `${response.data.user.id}`
-                );
-            })
+        try {
+            localStorage.removeItem("simple_CRUD_token");
+            localStorage.removeItem("simple_CRUD_Id");
+            const response = await api.post<{token: string, user: iUser}>("/login", data);
+            toast.success("Successful login!", { autoClose: 2300 });
+            localStorage.setItem(
+                "simple_CRUD_token",
+                `${response.data.token}`
+            );
+            localStorage.setItem(
+                "simple_CRUD_Id",
+                `${response.data.user.id}`
+            );
+            setUser(response.data.user);
+            navigate("/dashboard", {replace: true});
         } catch (error) {
-            console.log(error);
-            toast.error("Incorrect Email or Password", { autoClose: 3000 });
+            const AxiosErrors = error as AxiosError<iApiError>
+            console.log(AxiosErrors.response?.data.message);
+            toast.error(`${AxiosErrors.response?.data.message}`, { autoClose: 2300 });
         }
     };
 
@@ -64,9 +72,10 @@ export const LoginPage = () => {
                     />
                     {errors.password?.message}
 
-                    <button type="submit">Login</button>
+                    <button className="form-button" type="submit">Login</button>
                     <span className="spanJaRegistrado">Not registered yet?</span>
-                    <button onClick={() => navigate("/register")}>Register</button>
+                    <button className="form-button" onClick={() => navigate("/register")}>Register</button>
+                    <StyledToast/>
                 </>
             </form>
         </StyledLogin>

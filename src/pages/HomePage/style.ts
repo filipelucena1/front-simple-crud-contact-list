@@ -31,7 +31,7 @@ export const StyledHomePage = styled.div`
             max-width: 20vw;
         }
     }
-    button{
+    a{
         margin-top: 2vh;
         background-color: #ff9900;
         color: black;

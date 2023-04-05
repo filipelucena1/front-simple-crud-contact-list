@@ -1,4 +1,13 @@
 import styled from "styled-components";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+
+
+export const StyledToast = styled(ToastContainer)`
+    .Toastify__toast--success, .Toastify__toast--error{
+        background-color: whitesmoke;
+  }
+`
 
 export const StyledLogin = styled.div`
     width: 100%;
@@ -40,7 +49,7 @@ export const StyledLogin = styled.div`
             font-size: 2.5vh;
             text-align: center;
         }
-        button{
+        .form-button{
             padding: 2vh;
             border-radius: 5%;
             background-color: #0851fd;
